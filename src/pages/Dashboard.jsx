@@ -38,7 +38,7 @@ const Dashboard = () => {
   const recentActivity = [
     { user: 'John Kamau', action: 'Registered as a worker', time: '2 min ago', icon: '👤', color: 'from-[#FFB84D] to-[#E69A30]' },
     { user: 'Jane Muthoni', action: 'Posted a plumbing job', time: '15 min ago', icon: '💼', color: 'from-blue-500 to-blue-600' },
-    { user: 'Sarah Wanjiku', action: 'Completed a cleaning job', time: '1 hour ago', icon: '✅', color: 'from-green-500 to-green-600' },
+    { user: 'Sarah Wanjau', action: 'Completed a cleaning job', time: '1 hour ago', icon: '✅', color: 'from-green-500 to-green-600' },
     { user: 'Peter Ochieng', action: 'Requested withdrawal', time: '3 hours ago', icon: '💰', color: 'from-purple-500 to-purple-600' },
   ];
 
