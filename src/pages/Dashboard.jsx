@@ -5,6 +5,9 @@ import {
   UserPlus, PlusCircle, Wallet, Award
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { db } from "../firebase";
+
+console.log("Firestore:", db);
 
 const Dashboard = () => {
   const navigate = useNavigate();
