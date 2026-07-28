@@ -1,23 +1,85 @@
-import { useState } from 'react';
-import { Search, Star, Filter, ThumbsUp, MessageSquare } from 'lucide-react';
-import { ratings } from '../data/mockData';
+import { useState, useEffect, useMemo } from 'react';
+import { Search, Star, ThumbsUp, MessageSquare, Loader2, AlertCircle, Trash2 } from 'lucide-react';
+import { getReviews, deleteReview } from '../services/reviewService';
+import { getBookings } from '../services/bookingService';
+import { formatDate } from '../utils/formatters';
 
 const Ratings = () => {
+  const [reviews, setReviews] = useState([]);
+  const [bookingsById, setBookingsById] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRating, setFilterRating] = useState('all');
+  const [deletingId, setDeletingId] = useState(null);
 
-  const filteredRatings = ratings.filter(r => {
-    const matchesSearch = r.employer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         r.worker.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRating = filterRating === 'all' || r.rating === parseInt(filterRating);
+  const loadData = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const [reviewData, bookingData] = await Promise.all([getReviews(), getBookings()]);
+      setReviews(reviewData);
+      const map = {};
+      bookingData.forEach((b) => { map[b.id] = b; });
+      setBookingsById(map);
+    } catch (err) {
+      console.error('Ratings load error:', err);
+      setError('Could not load reviews from Firestore.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  // Reviews only store bookingId + clientId — employer/worker display names
+  // come from joining against the related Booking doc (which already has
+  // both the client and provider display names denormalized onto it).
+  const enrichedReviews = useMemo(
+    () =>
+      reviews.map((r) => {
+        const booking = bookingsById[r.bookingId];
+        return {
+          ...r,
+          employer: booking?.client || 'Unknown client',
+          worker: booking?.provider || 'Unknown provider',
+        };
+      }),
+    [reviews, bookingsById]
+  );
+
+  const filteredRatings = enrichedReviews.filter((r) => {
+    const matchesSearch =
+      r.employer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      r.worker.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRating = filterRating === 'all' || r.rating === parseInt(filterRating, 10);
     return matchesSearch && matchesRating;
   });
 
-  const averageRating = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
-  const ratingCounts = ratings.reduce((acc, r) => {
+  const averageRating = reviews.length
+    ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length
+    : 0;
+
+  const ratingCounts = reviews.reduce((acc, r) => {
     acc[r.rating] = (acc[r.rating] || 0) + 1;
     return acc;
   }, {});
+
+  const handleDelete = async (reviewId) => {
+    if (!window.confirm('Delete this review? This cannot be undone.')) return;
+    setDeletingId(reviewId);
+    try {
+      await deleteReview(reviewId);
+      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+    } catch (err) {
+      console.error('Delete review error:', err);
+      alert('Could not delete review. Please try again.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div>
@@ -31,15 +93,22 @@ const Ratings = () => {
             <p className="text-xs text-gray-500">Average Rating</p>
             <div className="flex items-center justify-center gap-1">
               <Star className="text-primary fill-primary" size={20} />
-              <span className="text-xl font-bold text-navy">{averageRating.toFixed(1)}</span>
+              <span className="text-xl font-bold text-navy">{loading ? '—' : averageRating.toFixed(1)}</span>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 text-center">
             <p className="text-xs text-gray-500">Total Reviews</p>
-            <p className="text-xl font-bold text-navy">{ratings.length}</p>
+            <p className="text-xl font-bold text-navy">{loading ? '—' : reviews.length}</p>
           </div>
         </div>
       </div>
+
+      {error && (
+        <div className="mb-6 flex items-center gap-2 bg-red-50 text-red-600 border border-red-100 rounded-xl px-4 py-3 text-sm">
+          <AlertCircle size={16} />
+          {error}
+        </div>
+      )}
 
       {/* Rating Distribution */}
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-6">
@@ -47,7 +116,7 @@ const Ratings = () => {
         <div className="space-y-2">
           {[5, 4, 3, 2, 1].map((star) => {
             const count = ratingCounts[star] || 0;
-            const percentage = ratings.length > 0 ? (count / ratings.length) * 100 : 0;
+            const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
             return (
               <div key={star} className="flex items-center gap-4">
                 <div className="flex items-center gap-1 w-16">
@@ -60,9 +129,7 @@ const Ratings = () => {
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
-                <div className="text-sm text-gray-500 w-12 text-right">
-                  {count}
-                </div>
+                <div className="text-sm text-gray-500 w-12 text-right">{count}</div>
               </div>
             );
           })}
@@ -98,46 +165,62 @@ const Ratings = () => {
       </div>
 
       {/* Ratings List */}
-      <div className="space-y-4">
-        {filteredRatings.map((rating) => (
-          <div key={rating.id} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={18}
-                        className={i < rating.rating ? 'text-primary fill-primary' : 'text-gray-300'}
-                      />
-                    ))}
+      {loading ? (
+        <div className="flex items-center justify-center gap-2 text-gray-400 py-16">
+          <Loader2 size={20} className="animate-spin" />
+          Loading reviews…
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredRatings.map((rating) => (
+            <div key={rating.id} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          size={18}
+                          className={i < rating.rating ? 'text-primary fill-primary' : 'text-gray-300'}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium text-navy">{rating.rating}.0</span>
+                    <span className="text-xs text-gray-400">•</span>
+                    <span className="text-xs text-gray-500">Booking: {rating.bookingId}</span>
                   </div>
-                  <span className="text-sm font-medium text-navy">{rating.rating}.0</span>
-                  <span className="text-xs text-gray-400">•</span>
-                  <span className="text-xs text-gray-500">Job: {rating.jobId}</span>
+                  <p className="text-sm text-gray-600 mt-2">{rating.comment}</p>
+                  <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 flex-wrap">
+                    <span className="flex items-center gap-1">
+                      <ThumbsUp size={14} />
+                      Employer: {rating.employer}
+                    </span>
+                    <span>→</span>
+                    <span className="flex items-center gap-1">
+                      <MessageSquare size={14} />
+                      Worker: {rating.worker}
+                    </span>
+                    <span>{formatDate(rating.createdAt)}</span>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-600 mt-2">{rating.comment}</p>
-                <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 flex-wrap">
-                  <span className="flex items-center gap-1">
-                    <ThumbsUp size={14} />
-                    Employer: {rating.employer}
-                  </span>
-                  <span>→</span>
-                  <span className="flex items-center gap-1">
-                    <MessageSquare size={14} />
-                    Worker: {rating.worker}
-                  </span>
-                  <span>{rating.date}</span>
-                </div>
+                <button
+                  disabled={deletingId === rating.id}
+                  onClick={() => handleDelete(rating.id)}
+                  className="flex items-center gap-1 text-xs text-red-500 hover:underline whitespace-nowrap ml-4 disabled:opacity-50"
+                >
+                  <Trash2 size={14} />
+                  Delete
+                </button>
               </div>
-              <button className="text-xs text-primary hover:underline whitespace-nowrap ml-4">
-                View Job
-              </button>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+
+          {filteredRatings.length === 0 && (
+            <div className="text-center py-12 text-gray-500 text-sm">No reviews match your filters.</div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

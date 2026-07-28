@@ -1,49 +1,93 @@
-import { useState } from 'react';
-import { Bell, Check, X, AlertCircle, CreditCard, Users, Briefcase, Trash2 } from 'lucide-react';
-import { notifications as initialNotifications } from '../data/mockData';
+import { useState, useEffect } from 'react';
+import { Bell, Check, X, AlertCircle, CreditCard, Users, Briefcase, Trash2, Loader2 } from 'lucide-react';
+import { getNotifications, markAsRead, deleteNotification } from '../services/notificationService';
+import { timeAgo } from '../utils/formatters';
+
+// Notification docs don't have a `type` field in the schema, so the icon is
+// picked with a simple keyword heuristic against the title/message. If you
+// add a `type` field later, this can switch to a direct lookup.
+const getIcon = (notification) => {
+  const text = `${notification.title || ''} ${notification.message || ''}`.toLowerCase();
+  if (text.includes('job') || text.includes('booking')) return <Briefcase size={18} className="text-info" />;
+  if (text.includes('user') || text.includes('registered')) return <Users size={18} className="text-primary" />;
+  if (text.includes('verified')) return <Check size={18} className="text-success" />;
+  if (text.includes('payment') || text.includes('withdrawal')) return <CreditCard size={18} className="text-success" />;
+  return <AlertCircle size={18} className="text-gray-400" />;
+};
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [filter, setFilter] = useState('all');
+  const [busyId, setBusyId] = useState(null);
 
-  const getIcon = (type) => {
-    switch (type) {
-      case 'job_posted': return <Briefcase size={18} className="text-info" />;
-      case 'user_registered': return <Users size={18} className="text-primary" />;
-      case 'user_verified': return <Check size={18} className="text-success" />;
-      case 'payment_completed': return <CreditCard size={18} className="text-success" />;
-      case 'withdrawal_request': return <CreditCard size={18} className="text-warning" />;
-      default: return <AlertCircle size={18} className="text-gray-400" />;
-    }
-  };
+  useEffect(() => {
+    setLoading(true);
+    setError('');
 
-  const filteredNotifications = notifications.filter(n => {
-    if (filter === 'unread') return !n.read;
-    if (filter === 'read') return n.read;
+    // Real-time subscription — no recipientId filter, so this shows every
+    // notification in the system (appropriate for an admin view).
+    const unsubscribe = getNotifications((data) => {
+      setNotifications(data);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const filteredNotifications = notifications.filter((n) => {
+    if (filter === 'unread') return !n.isRead;
+    if (filter === 'read') return n.isRead;
     return true;
   });
 
-  const markAsRead = (id) => {
-    setNotifications(prev =>
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  const handleMarkAsRead = async (id) => {
+    setBusyId(id);
+    try {
+      await markAsRead(id);
+      // No local state mutation needed — onSnapshot will push the update.
+    } catch (err) {
+      console.error('Mark as read error:', err);
+      alert('Could not update this notification.');
+    } finally {
+      setBusyId(null);
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(n => ({ ...n, read: true }))
-    );
+  const handleMarkAllAsRead = async () => {
+    const unread = notifications.filter((n) => !n.isRead);
+    try {
+      await Promise.all(unread.map((n) => markAsRead(n.id)));
+    } catch (err) {
+      console.error('Mark all as read error:', err);
+      alert('Some notifications could not be updated.');
+    }
   };
 
-  const deleteNotification = (id) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+  const handleDelete = async (id) => {
+    setBusyId(id);
+    try {
+      await deleteNotification(id);
+    } catch (err) {
+      console.error('Delete notification error:', err);
+      alert('Could not delete this notification.');
+    } finally {
+      setBusyId(null);
+    }
   };
 
-  const deleteAll = () => {
-    setNotifications([]);
+  const handleDeleteAll = async () => {
+    if (!window.confirm('Delete all notifications? This cannot be undone.')) return;
+    try {
+      await Promise.all(notifications.map((n) => deleteNotification(n.id)));
+    } catch (err) {
+      console.error('Delete all error:', err);
+      alert('Some notifications could not be deleted.');
+    }
   };
-
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <div>
@@ -55,7 +99,7 @@ const Notifications = () => {
         <div className="flex flex-wrap gap-2">
           {unreadCount > 0 && (
             <button
-              onClick={markAllAsRead}
+              onClick={handleMarkAllAsRead}
               className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-lg font-medium hover:bg-primary/20 transition-colors"
             >
               <Check size={18} />
@@ -64,7 +108,7 @@ const Notifications = () => {
           )}
           {notifications.length > 0 && (
             <button
-              onClick={deleteAll}
+              onClick={handleDeleteAll}
               className="flex items-center gap-2 bg-error/10 text-error px-4 py-2 rounded-lg font-medium hover:bg-error/20 transition-colors"
             >
               <Trash2 size={18} />
@@ -74,6 +118,13 @@ const Notifications = () => {
         </div>
       </div>
 
+      {error && (
+        <div className="mb-6 flex items-center gap-2 bg-red-50 text-red-600 border border-red-100 rounded-xl px-4 py-3 text-sm">
+          <AlertCircle size={16} />
+          {error}
+        </div>
+      )}
+
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 mb-6">
         <div className="flex gap-2">
@@ -82,9 +133,7 @@ const Notifications = () => {
               key={f}
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors capitalize ${
-                filter === f
-                  ? 'bg-primary text-navy'
-                  : 'text-gray-500 hover:bg-gray-100'
+                filter === f ? 'bg-primary text-navy' : 'text-gray-500 hover:bg-gray-100'
               }`}
             >
               {f} {f === 'unread' && `(${unreadCount})`}
@@ -107,61 +156,68 @@ const Notifications = () => {
           </div>
         </div>
 
-        <div className="divide-y divide-gray-100">
-          {filteredNotifications.map((notification) => (
-            <div
-              key={notification.id}
-              className={`p-4 hover:bg-gray-50 transition-colors ${
-                !notification.read ? 'bg-primary/5' : ''
-              }`}
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                  {getIcon(notification.type)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <p className={`text-sm ${!notification.read ? 'font-semibold' : 'font-medium'}`}>
-                        {notification.title}
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">{notification.message}</p>
-                      <div className="flex items-center gap-4 mt-2">
-                        <span className="text-xs text-gray-400">{notification.time}</span>
-                        {!notification.read && (
-                          <span className="text-xs text-primary font-medium">New</span>
-                        )}
+        {loading ? (
+          <div className="flex items-center justify-center gap-2 text-gray-400 py-16">
+            <Loader2 size={20} className="animate-spin" />
+            Loading notifications…
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {filteredNotifications.map((notification) => (
+              <div
+                key={notification.id}
+                className={`p-4 hover:bg-gray-50 transition-colors ${!notification.isRead ? 'bg-primary/5' : ''}`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                    {getIcon(notification)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm ${!notification.isRead ? 'font-semibold' : 'font-medium'}`}>
+                          {notification.title}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-1">{notification.message}</p>
+                        <div className="flex items-center gap-4 mt-2">
+                          <span className="text-xs text-gray-400">{timeAgo(notification.createdAt)}</span>
+                          {!notification.isRead && (
+                            <span className="text-xs text-primary font-medium">New</span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {!notification.read && (
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {!notification.isRead && (
+                          <button
+                            disabled={busyId === notification.id}
+                            onClick={() => handleMarkAsRead(notification.id)}
+                            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                            title="Mark as read"
+                          >
+                            <Check size={16} className="text-gray-400" />
+                          </button>
+                        )}
                         <button
-                          onClick={() => markAsRead(notification.id)}
-                          className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                          title="Mark as read"
+                          disabled={busyId === notification.id}
+                          onClick={() => handleDelete(notification.id)}
+                          className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                          title="Delete"
                         >
-                          <Check size={16} className="text-gray-400" />
+                          <X size={16} className="text-gray-400" />
                         </button>
-                      )}
-                      <button
-                        onClick={() => deleteNotification(notification.id)}
-                        className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                        title="Delete"
-                      >
-                        <X size={16} className="text-gray-400" />
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
 
-        {filteredNotifications.length === 0 && (
-          <div className="text-center py-12">
-            <Bell size={48} className="text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">No notifications to show</p>
+            {filteredNotifications.length === 0 && (
+              <div className="text-center py-12">
+                <Bell size={48} className="text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">No notifications to show</p>
+              </div>
+            )}
           </div>
         )}
       </div>
