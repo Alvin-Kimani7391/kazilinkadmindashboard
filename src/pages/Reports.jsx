@@ -38,26 +38,59 @@ const Reports = () => {
         setOverview(statsData);
       } catch (err) {
         console.error('Reports load error:', err);
-        if (!cancelled) setError('Could not generate report from Firestore.');
+        if (!cancelled) setError('Could not generate report from Firebase Data Connect.');
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
 
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [period]);
 
   const totalReviewsInDistribution = Object.values(distribution).reduce((a, b) => a + b, 0);
+
+  const handleExport = () => {
+    if (!report) return;
+
+    const csvData = [
+      ['Metric', 'Value'],
+      ['Period', report.period],
+      ['New Users', report.users],
+      ['New Bookings', report.jobs],
+      ['Completed Bookings', report.completedJobs],
+      ['Revenue', report.revenue],
+      ['Active Users', report.activeUsers],
+      ['Average Rating', report.averageRating],
+      ['Total Reviews (Period)', report.totalReviews],
+      ['Work Sessions', report.completedWorkSessions],
+    ];
+
+    const csvContent =
+      'data:text/csv;charset=utf-8,' + csvData.map((e) => e.join(',')).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `report_${period}_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-navy">Reports</h1>
-          <p className="text-gray-500">Live analytics generated from Firestore</p>
+          <p className="text-gray-500">Live analytics generated from Firebase Data Connect</p>
         </div>
-        <button className="flex items-center gap-2 bg-primary text-navy px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+        <button
+          onClick={handleExport}
+          disabled={!report || loading}
+          className="flex items-center gap-2 bg-primary text-navy px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
+        >
           <Download size={18} />
           Export Report
         </button>
@@ -143,7 +176,7 @@ const Reports = () => {
             </div>
           </div>
 
-          {/* Charts Section */}
+          {/* Analytics Overview Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
               <h4 className="font-semibold text-navy mb-4">All-Time Overview</h4>

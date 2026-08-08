@@ -1,0 +1,126 @@
+# All operations run as an authenticated user (any signed-in Firebase Auth
+# user). If you want to restrict this to admins only, add a `role` field to
+# User and swap these for `@auth(level: USER, ...)` with a role check, or
+# enforce it via a Cloud Function-fronted connector later.
+
+query ListUsers @auth(level: USER) {
+  users {
+    id
+    name
+    email
+    role
+    phoneNumber
+    profilePicture
+    bio
+    hourlyRate
+  }
+}
+
+query GetUser($id: UUID!) @auth(level: USER) {
+  user(id: $id) {
+    id
+    name
+    email
+    role
+    phoneNumber
+    profilePicture
+    bio
+    hourlyRate
+  }
+}
+
+query ListBookings @auth(level: USER) {
+  bookings {
+    id
+    status
+    startTime
+    endTime
+    totalDurationSeconds
+    serviceLocation
+    client {
+      id
+      name
+    }
+    provider {
+      id
+      name
+      hourlyRate
+    }
+    category {
+      id
+      name
+    }
+  }
+}
+
+query GetBooking($id: UUID!) @auth(level: USER) {
+  booking(id: $id) {
+    id
+    status
+    startTime
+    endTime
+    totalDurationSeconds
+    serviceLocation
+    client {
+      id
+      name
+      email
+      phoneNumber
+    }
+    provider {
+      id
+      name
+      email
+      phoneNumber
+      hourlyRate
+    }
+    category {
+      id
+      name
+    }
+  }
+}
+
+query ListReviews @auth(level: USER) {
+  reviews {
+    id
+    rating
+    comment
+    createdAt
+    client {
+      id
+      name
+    }
+    booking {
+      id
+      category {
+        name
+      }
+      provider {
+        id
+        name
+      }
+    }
+  }
+}
+
+query ListNotifications @auth(level: USER) {
+  notifications(orderBy: { createdAt: DESC }) {
+    id
+    title
+    message
+    isRead
+    createdAt
+    recipient {
+      id
+      name
+    }
+  }
+}
+
+query ListServiceCategories @auth(level: PUBLIC) {
+  serviceCategories {
+    id
+    name
+  }
+}

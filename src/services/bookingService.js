@@ -1,25 +1,42 @@
-import { db } from "../firebase";
+import { dataConnect } from "../dataconnect";
 import {
-  collection,
-  doc,
-  getDocs,
-  getDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-} from "firebase/firestore";
-
-const bookingsRef = collection(db, "Booking");
+  listBookings,
+  getBooking,
+  updateBookingStatus as updateBookingStatusMutation,
+  deleteBooking as deleteBookingMutation,
+} from "@dataconnect/admin-generated";
 
 /**
- * Fetch all bookings, most recently started first.
+ * Data Connect returns client/provider/category as nested objects.
+ * We flatten the response here and normalize `status` to lowercase for frontend components.
+ */
+const flattenBooking = (b) => ({
+  id: b.id,
+  status: b.status ? b.status.toLowerCase() : "open",
+  startTime: b.startTime,
+  endTime: b.endTime,
+  totalDurationSeconds: b.totalDurationSeconds,
+  serviceLocation: b.serviceLocation,
+  client: b.client?.name || "Unknown",
+  clientId: b.client?.id,
+  provider: b.provider?.name || null,
+  providerId: b.provider?.id || null,
+  providerHourlyRate: b.provider?.hourlyRate ?? 0,
+  category: b.category?.name || null,
+  categoryId: b.category?.id || null,
+});
+
+/**
+ * Fetch all bookings.
+ * Note: sorting is done client-side since the ListBookings query doesn't
+ * declare an orderBy — add one in queries.gql if you want server-side sort.
  */
 export const getBookings = async () => {
   try {
-    const q = query(bookingsRef, orderBy("startTime", "desc"));
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    const { data } = await listBookings(dataConnect);
+    return (data?.bookings || [])
+      .map(flattenBooking)
+      .sort((a, b) => new Date(b.startTime || 0) - new Date(a.startTime || 0));
   } catch (error) {
     console.error("bookingService.getBookings error:", error);
     throw error;
@@ -28,8 +45,8 @@ export const getBookings = async () => {
 
 export const getBookingById = async (bookingId) => {
   try {
-    const snap = await getDoc(doc(db, "Booking", bookingId));
-    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+    const { data } = await getBooking(dataConnect, { id: bookingId });
+    return data?.booking ? flattenBooking(data.booking) : null;
   } catch (error) {
     console.error("bookingService.getBookingById error:", error);
     throw error;
@@ -37,27 +54,17 @@ export const getBookingById = async (bookingId) => {
 };
 
 /**
- * Generic update for any Booking fields
- * (client, provider, category, times, serviceLocation, etc).
- */
-export const updateBooking = async (bookingId, updates) => {
-  try {
-    await updateDoc(doc(db, "Booking", bookingId), updates);
-    return { id: bookingId, ...updates };
-  } catch (error) {
-    console.error("bookingService.updateBooking error:", error);
-    throw error;
-  }
-};
-
-/**
- * Convenience wrapper for just changing a booking's status
- * (e.g. 'open' -> 'in_progress' -> 'completed' / 'cancelled').
+ * Convenience wrapper for updating status.
+ * Accepts lowercase string from client and converts to Uppercase Enum format required by GraphQL schema.
  */
 export const updateBookingStatus = async (bookingId, status) => {
   try {
-    await updateDoc(doc(db, "Booking", bookingId), { status });
-    return { id: bookingId, status };
+    const formattedStatus = status.toUpperCase();
+    await updateBookingStatusMutation(dataConnect, {
+      id: bookingId,
+      status: formattedStatus,
+    });
+    return { id: bookingId, status: status.toLowerCase() };
   } catch (error) {
     console.error("bookingService.updateBookingStatus error:", error);
     throw error;
@@ -66,7 +73,7 @@ export const updateBookingStatus = async (bookingId, status) => {
 
 export const deleteBooking = async (bookingId) => {
   try {
-    await deleteDoc(doc(db, "Booking", bookingId));
+    await deleteBookingMutation(dataConnect, { id: bookingId });
     return true;
   } catch (error) {
     console.error("bookingService.deleteBooking error:", error);

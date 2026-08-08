@@ -1,25 +1,19 @@
-import { db } from "../firebase";
+import { dataConnect } from "../dataconnect";
 import {
-  collection,
-  doc,
-  getDocs,
-  getDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-} from "firebase/firestore";
-
-const usersRef = collection(db, "User");
+  listUsers,
+  getUser,
+  createUser as createUserMutation,
+  updateUser as updateUserMutation,
+  deleteUser as deleteUserMutation,
+} from "@dataconnect/admin-generated";
 
 /**
- * Fetch all users, newest first (falls back gracefully if no createdAt field).
+ * Fetch all users.
  */
 export const getUsers = async () => {
   try {
-    const snapshot = await getDocs(usersRef);
-    return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    const { data } = await listUsers(dataConnect);
+    return data?.users || [];
   } catch (error) {
     console.error("userService.getUsers error:", error);
     throw error;
@@ -28,8 +22,8 @@ export const getUsers = async () => {
 
 export const getUserById = async (userId) => {
   try {
-    const snap = await getDoc(doc(db, "User", userId));
-    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+    const { data } = await getUser(dataConnect, { id: userId });
+    return data?.user || null;
   } catch (error) {
     console.error("userService.getUserById error:", error);
     throw error;
@@ -37,13 +31,13 @@ export const getUserById = async (userId) => {
 };
 
 /**
- * Creates a User document.
- * @param {{ name, email, role, phoneNumber, profilePicture, bio, hourlyRate }} userData
+ * Creates a User record with all backend-supported fields.
  */
 export const createUser = async (userData) => {
   try {
-    const docRef = await addDoc(usersRef, userData);
-    return { id: docRef.id, ...userData };
+    const { data } = await createUserMutation(dataConnect, userData);
+    const generatedId = data?.user_insert?.id || data?.user?.id || crypto.randomUUID();
+    return { id: generatedId, ...userData };
   } catch (error) {
     console.error("userService.createUser error:", error);
     throw error;
@@ -52,7 +46,7 @@ export const createUser = async (userData) => {
 
 export const updateUser = async (userId, updates) => {
   try {
-    await updateDoc(doc(db, "User", userId), updates);
+    await updateUserMutation(dataConnect, { id: userId, ...updates });
     return { id: userId, ...updates };
   } catch (error) {
     console.error("userService.updateUser error:", error);
@@ -62,7 +56,7 @@ export const updateUser = async (userId, updates) => {
 
 export const deleteUser = async (userId) => {
   try {
-    await deleteDoc(doc(db, "User", userId));
+    await deleteUserMutation(dataConnect, { id: userId });
     return true;
   } catch (error) {
     console.error("userService.deleteUser error:", error);

@@ -1,22 +1,12 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users, Briefcase, CreditCard, Star,
-  TrendingUp, Zap, CheckCircle, ArrowRight,
-  UserPlus, PlusCircle, Wallet, Award, AlertCircle
+  Zap, CheckCircle, ArrowRight,
+  UserPlus, PlusCircle, Wallet, Award, AlertCircle, Tag
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { getDashboardStats } from '../services/dashboardService';
-import { getBookings } from '../services/bookingService';
-import { getReviews } from '../services/reviewService';
-import { getUsers } from '../services/userService';
-import { timeAgo } from '../utils/formatters';
 
-const ICONS = {
-  open: '📋',
-  in_progress: '🛠️',
-  completed: '✅',
-  cancelled: '❌',
-};
+import { getDashboardSummary } from '../services/dashboardService';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -24,11 +14,13 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [counts, setCounts] = useState({ users: 0, bookings: 0, reviews: 0, notifications: 0 });
-  const [revenue, setRevenue] = useState(0);
-  const [averageRating, setAverageRating] = useState(0);
-  const [recentActivity, setRecentActivity] = useState([]);
-  const [topWorkers, setTopWorkers] = useState([]);
+  const [summary, setSummary] = useState({
+    counts: { users: 0, bookings: 0, categories: 0, reviews: 0, notifications: 0 },
+    revenue: 0,
+    averageRating: 0,
+    recentActivity: [],
+    topWorkers: [],
+  });
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -44,94 +36,13 @@ const Dashboard = () => {
       setLoading(true);
       setError('');
       try {
-        const [stats, bookings, reviews, users] = await Promise.all([
-          getDashboardStats(),
-          getBookings(),
-          getReviews(),
-          getUsers(),
-        ]);
-
-        if (cancelled) return;
-
-        setCounts(stats);
-
-        // Build a providerId -> hourlyRate lookup so completed bookings can
-        // be turned into a revenue figure (Booking itself has no amount field).
-        const rateByProviderId = {};
-        users.forEach((u) => {
-          if (u.id) rateByProviderId[u.id] = u.hourlyRate || 0;
-        });
-
-        const completed = bookings.filter((b) => b.status === 'completed');
-        const totalRevenue = completed.reduce((sum, b) => {
-          const hours = (b.totalDurationSeconds || 0) / 3600;
-          const rate = rateByProviderId[b.providerId] ?? 0;
-          return sum + hours * rate;
-        }, 0);
-        setRevenue(totalRevenue);
-
-        const avgRating = reviews.length
-          ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length
-          : 0;
-        setAverageRating(avgRating);
-
-        // Recent activity: latest 4 bookings, described by their status.
-        const sortedBookings = [...bookings].sort((a, b) => {
-          const aTime = a.startTime?.toDate ? a.startTime.toDate() : new Date(a.startTime || 0);
-          const bTime = b.startTime?.toDate ? b.startTime.toDate() : new Date(b.startTime || 0);
-          return bTime - aTime;
-        });
-
-        const activity = sortedBookings.slice(0, 4).map((b) => ({
-          user: b.client || 'Client',
-          action:
-            b.status === 'completed'
-              ? `Completed a ${b.category || 'job'} booking`
-              : b.status === 'in_progress'
-              ? `${b.category || 'Job'} in progress with ${b.provider || 'provider'}`
-              : b.status === 'cancelled'
-              ? `Cancelled a ${b.category || 'job'} booking`
-              : `Posted a ${b.category || 'job'} booking`,
-          time: timeAgo(b.startTime),
-          icon: ICONS[b.status] || '📋',
-        }));
-        setRecentActivity(activity);
-
-        // Top workers: rank providers by completed booking count, with
-        // average rating pulled from reviews on their bookings.
-        const bookingById = {};
-        bookings.forEach((b) => { bookingById[b.id] = b; });
-
-        const providerStats = {};
-        completed.forEach((b) => {
-          if (!b.providerId) return;
-          if (!providerStats[b.providerId]) {
-            providerStats[b.providerId] = { name: b.provider || 'Provider', jobs: 0, ratings: [] };
-          }
-          providerStats[b.providerId].jobs += 1;
-        });
-
-        reviews.forEach((r) => {
-          const booking = bookingById[r.bookingId];
-          if (booking?.providerId && providerStats[booking.providerId]) {
-            providerStats[booking.providerId].ratings.push(r.rating || 0);
-          }
-        });
-
-        const ranked = Object.values(providerStats)
-          .map((p) => ({
-            name: p.name,
-            jobs: p.jobs,
-            rating: p.ratings.length
-              ? (p.ratings.reduce((s, r) => s + r, 0) / p.ratings.length).toFixed(1)
-              : '—',
-          }))
-          .sort((a, b) => b.jobs - a.jobs)
-          .slice(0, 3);
-        setTopWorkers(ranked);
+        const data = await getDashboardSummary();
+        if (!cancelled) {
+          setSummary(data);
+        }
       } catch (err) {
         console.error('Dashboard load error:', err);
-        if (!cancelled) setError('Could not load live dashboard data. Please try again.');
+        if (!cancelled) setError('Could not fetch latest data. Displaying fallback values.');
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -141,20 +52,17 @@ const Dashboard = () => {
     return () => { cancelled = true; };
   }, []);
 
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
-
   const stats = [
-    { title: 'Total Users', value: counts.users.toLocaleString(), icon: Users, color: 'from-[#FFB84D] to-[#E69A30]', bg: 'from-[#FFB84D]/10 to-[#E69A30]/10', path: '/users' },
-    { title: 'Total Jobs', value: counts.bookings.toLocaleString(), icon: Briefcase, color: 'from-blue-500 to-blue-600', bg: 'from-blue-500/10 to-blue-600/10', path: '/jobs' },
-    { title: 'Revenue', value: `KES ${Math.round(revenue).toLocaleString()}`, icon: CreditCard, color: 'from-green-500 to-green-600', bg: 'from-green-500/10 to-green-600/10', path: '/payments' },
-    { title: 'Rating', value: `${averageRating.toFixed(1)} ★`, icon: Star, color: 'from-purple-500 to-purple-600', bg: 'from-purple-500/10 to-purple-600/10', path: '/reviews' },
+    { title: 'Total Users', value: summary.counts.users.toLocaleString(), icon: Users, color: 'from-[#FFB84D] to-[#E69A30]', bg: 'from-[#FFB84D]/10 to-[#E69A30]/10', path: '/users' },
+    { title: 'Total Jobs', value: summary.counts.bookings.toLocaleString(), icon: Briefcase, color: 'from-blue-500 to-blue-600', bg: 'from-blue-500/10 to-blue-600/10', path: '/jobs' },
+    { title: 'Categories', value: (summary.counts.categories || 0).toLocaleString(), icon: Tag, color: 'from-orange-500 to-amber-600', bg: 'from-orange-500/10 to-amber-600/10', path: '/categories' },
+    { title: 'Revenue', value: `KES ${Math.round(summary.revenue).toLocaleString()}`, icon: CreditCard, color: 'from-green-500 to-green-600', bg: 'from-green-500/10 to-green-600/10', path: '/payments' },
   ];
 
   const quickActions = [
     { title: 'Add User', icon: UserPlus, color: 'from-[#FFB84D] to-[#E69A30]', path: '/users' },
     { title: 'Post Job', icon: PlusCircle, color: 'from-blue-500 to-blue-600', path: '/jobs' },
+    { title: 'Categories', icon: Tag, color: 'from-orange-500 to-amber-600', path: '/categories' },
     { title: 'Payments', icon: Wallet, color: 'from-green-500 to-green-600', path: '/payments' },
     { title: 'Reviews', icon: Award, color: 'from-purple-500 to-purple-600', path: '/reviews' },
   ];
@@ -179,7 +87,7 @@ const Dashboard = () => {
               </span>
               <span className="px-4 py-2 bg-gradient-to-br from-green-500/10 to-green-600/10 rounded-xl text-sm font-medium text-green-600">
                 <CheckCircle size={16} className="inline mr-1" />
-                Firestore connected
+                Data Connect
               </span>
             </div>
           </div>
@@ -198,7 +106,7 @@ const Dashboard = () => {
         {stats.map((stat, index) => (
           <div
             key={index}
-            onClick={() => handleNavigate(stat.path)}
+            onClick={() => navigate(stat.path)}
             className={`relative overflow-hidden animated-card cursor-pointer rounded-2xl p-6 bg-gradient-to-br ${stat.bg} border border-white/50 hover:border-[#FFB84D]/30`}
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl -mr-16 -mt-16"></div>
@@ -223,11 +131,11 @@ const Dashboard = () => {
           <span className="w-1 h-6 bg-gradient-to-b from-[#FFB84D] to-[#E69A30] rounded-full"></span>
           Quick Actions
         </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           {quickActions.map((action, index) => (
             <button
               key={index}
-              onClick={() => handleNavigate(action.path)}
+              onClick={() => navigate(action.path)}
               className="group relative overflow-hidden p-6 glass rounded-2xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/50"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
@@ -254,10 +162,10 @@ const Dashboard = () => {
           </h3>
           <div className="space-y-4">
             {loading && <p className="text-sm text-gray-400">Loading recent activity…</p>}
-            {!loading && recentActivity.length === 0 && (
+            {!loading && summary.recentActivity.length === 0 && (
               <p className="text-sm text-gray-400">No bookings yet.</p>
             )}
-            {recentActivity.map((item, index) => (
+            {summary.recentActivity.map((item, index) => (
               <div key={index} className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition-all duration-300 group">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FFB84D]/10 to-[#E69A30]/10 flex items-center justify-center text-lg shadow-lg flex-shrink-0">
                   {item.icon}
@@ -283,10 +191,10 @@ const Dashboard = () => {
           </h3>
           <div className="space-y-4">
             {loading && <p className="text-sm text-gray-400">Loading top workers…</p>}
-            {!loading && topWorkers.length === 0 && (
+            {!loading && summary.topWorkers.length === 0 && (
               <p className="text-sm text-gray-400">No completed bookings yet.</p>
             )}
-            {topWorkers.map((worker, index) => (
+            {summary.topWorkers.map((worker, index) => (
               <div key={index} className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition-all duration-300 group">
                 <div className="relative">
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FFB84D]/10 to-[#E69A30]/10 flex items-center justify-center text-2xl">

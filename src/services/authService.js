@@ -1,3 +1,4 @@
+// src/services/authService.js
 import { auth, db } from "../firebase";
 import {
   signInWithEmailAndPassword,
@@ -7,18 +8,37 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 
 /**
- * Logs in an admin using email/password.
- * Returns the Firebase auth user plus their Firestore profile (if it exists).
+ * Logs in an admin using Firebase Email/Password Auth.
+ * Attempts to retrieve profile from Firestore 'User' or 'users' collection.
  */
 export const login = async (email, password) => {
   try {
     const credential = await signInWithEmailAndPassword(auth, email, password);
-    const userDoc = await getDoc(doc(db, "User", credential.user.uid));
+    const uid = credential.user.uid;
+
+    // Check 'User' collection first, fallback to 'users'
+    let profileData = null;
+    let userDoc = await getDoc(doc(db, "User", uid));
+
+    if (!userDoc.exists()) {
+      userDoc = await getDoc(doc(db, "users", uid));
+    }
+
+    if (userDoc.exists()) {
+      profileData = { id: userDoc.id, ...userDoc.data() };
+    } else {
+      profileData = {
+        id: uid,
+        email: credential.user.email,
+        name: credential.user.displayName || email.split("@")[0],
+        role: "admin",
+      };
+    }
 
     return {
-      uid: credential.user.uid,
+      uid,
       email: credential.user.email,
-      profile: userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null,
+      profile: profileData,
     };
   } catch (error) {
     console.error("authService.login error:", error);
@@ -27,11 +47,12 @@ export const login = async (email, password) => {
 };
 
 /**
- * Logs the current user out.
+ * Logs the current user out of Firebase Auth and clears local storage.
  */
 export const logout = async () => {
   try {
     await signOut(auth);
+    localStorage.removeItem("adminUser");
     return true;
   } catch (error) {
     console.error("authService.logout error:", error);
@@ -40,18 +61,14 @@ export const logout = async () => {
 };
 
 /**
- * Returns the currently signed-in Firebase user (or null), synchronously
- * from the SDK's cached state. Use onAuthChange if you need to react to
- * the auth state resolving on first load.
+ * Returns the currently signed-in Firebase user (synchronously from cache).
  */
 export const getCurrentUser = () => {
   return auth.currentUser;
 };
 
 /**
- * Subscribes to auth state changes.
- * @param {(user: import('firebase/auth').User | null) => void} callback
- * @returns {() => void} unsubscribe function
+ * Subscribes to Firebase Auth state changes.
  */
 export const onAuthChange = (callback) => {
   return onAuthStateChanged(auth, callback);

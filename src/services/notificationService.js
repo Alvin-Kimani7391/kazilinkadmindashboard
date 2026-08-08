@@ -1,54 +1,64 @@
-import { db } from "../firebase";
+import { dataConnect } from "../dataconnect";
 import {
-  collection,
-  doc,
-  onSnapshot,
-  updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-  where,
-} from "firebase/firestore";
+  listNotifications,
+  markNotificationRead,
+  deleteNotification as deleteNotificationMutation,
+} from "@dataconnect/admin-generated";
 
-const notificationsRef = collection(db, "Notification");
+const flattenNotification = (n) => ({
+  id: n.id,
+  title: n.title || "",
+  message: n.message || "",
+  isRead: Boolean(n.isRead),
+  createdAt: n.createdAt,
+  recipientId: n.recipient?.id,
+  recipient: n.recipient?.name || null,
+});
+
+const POLL_INTERVAL_MS = 15000;
 
 /**
- * Subscribes to real-time notifications, newest first.
+ * Data Connect polling implementation.
+ * Returns an unsubscribe function and passes an optional `refetch` trigger to the callback runner.
  * @param {(notifications: Array) => void} callback
- * @param {string} [recipientId] optional filter to a single recipient
+ * @param {string} [recipientId] optional client-side filter
  * @returns {() => void} unsubscribe function
  */
 export const getNotifications = (callback, recipientId = null) => {
-  try {
-    const constraints = [orderBy("createdAt", "desc")];
-    if (recipientId) constraints.unshift(where("recipientId", "==", recipientId));
+  let cancelled = false;
 
-    const q = query(notificationsRef, ...constraints);
+  const fetchAndEmit = async () => {
+    try {
+      const { data } = await listNotifications(dataConnect);
+      if (cancelled) return;
 
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const notifications = snapshot.docs.map((docSnap) => ({
-          id: docSnap.id,
-          ...docSnap.data(),
-        }));
-        callback(notifications);
-      },
-      (error) => {
-        console.error("notificationService.getNotifications snapshot error:", error);
+      let notifications = (data?.notifications || []).map(flattenNotification);
+      
+      // Sort newest first
+      notifications.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+      if (recipientId) {
+        notifications = notifications.filter((n) => n.recipientId === recipientId);
       }
-    );
 
-    return unsubscribe;
-  } catch (error) {
-    console.error("notificationService.getNotifications error:", error);
-    throw error;
-  }
+      callback(notifications);
+    } catch (error) {
+      console.error("notificationService.getNotifications poll error:", error);
+    }
+  };
+
+  fetchAndEmit();
+  const intervalId = setInterval(fetchAndEmit, POLL_INTERVAL_MS);
+
+  return () => {
+    cancelled = true;
+    clearInterval(intervalId);
+  };
 };
 
 export const markAsRead = async (notificationId) => {
   try {
-    await updateDoc(doc(db, "Notification", notificationId), { isRead: true });
+    await markNotificationRead(dataConnect, { id: notificationId });
     return true;
   } catch (error) {
     console.error("notificationService.markAsRead error:", error);
@@ -58,7 +68,7 @@ export const markAsRead = async (notificationId) => {
 
 export const deleteNotification = async (notificationId) => {
   try {
-    await deleteDoc(doc(db, "Notification", notificationId));
+    await deleteNotificationMutation(dataConnect, { id: notificationId });
     return true;
   } catch (error) {
     console.error("notificationService.deleteNotification error:", error);

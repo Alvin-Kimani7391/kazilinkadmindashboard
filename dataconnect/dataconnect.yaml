@@ -1,0 +1,11 @@
+specVersion: "v1"
+serviceId: "kazi-connect-e7856-service"
+location: "europe-north1"
+schema:
+  source: "schema"
+  datasource:
+    postgresql:
+      database: "kazi-connect-e7856-database"
+      cloudSql:
+        instanceId: "kazi-connect-e7856-instance"
+connectorDirs: ["connector/admin"]

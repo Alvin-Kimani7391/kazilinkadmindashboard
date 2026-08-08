@@ -21,7 +21,7 @@ const Jobs = () => {
       setBookings(data);
     } catch (err) {
       console.error('Bookings load error:', err);
-      setError('Could not load bookings from Firestore.');
+      setError('Could not load bookings from Firebase Data Connect.');
     } finally {
       setLoading(false);
     }
@@ -46,14 +46,16 @@ const Jobs = () => {
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
-  const applyStatusChange = async (bookingId, status) => {
+  const applyStatusChange = async (bookingId, newStatus) => {
     setUpdatingId(bookingId);
     try {
-      await updateBookingStatus(bookingId, status);
-      setBookings((prev) => prev.map((b) => (b.id === bookingId ? { ...b, status } : b)));
+      await updateBookingStatus(bookingId, newStatus);
+      setBookings((prev) =>
+        prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b))
+      );
     } catch (err) {
       console.error('Update booking status error:', err);
-      alert('Could not update this booking. Please try again.');
+      alert('Could not update this booking status. Please try again.');
     } finally {
       setUpdatingId(null);
     }
@@ -133,10 +135,15 @@ const Jobs = () => {
           {/* Jobs Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {filteredBookings.map((booking) => (
-              <div key={booking.id} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
+              <div
+                key={booking.id}
+                className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-200"
+              >
                 <div className="flex items-start justify-between mb-3">
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-navy truncate">{booking.category || 'Booking'}</h3>
+                    <h3 className="font-semibold text-navy truncate">
+                      {booking.category || 'Booking'}
+                    </h3>
                     <p className="text-xs text-gray-500">{booking.id}</p>
                   </div>
                   <StatusBadge status={booking.status} />
@@ -173,7 +180,10 @@ const Jobs = () => {
                     {booking.categoryId ? `Category ID: ${booking.categoryId}` : ''}
                   </div>
                   <div className="flex gap-2">
-                    <button className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="View Details">
+                    <button
+                      className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                      title="View Details"
+                    >
                       <Eye size={18} className="text-gray-400" />
                     </button>
                     {booking.status === 'open' && (
@@ -182,7 +192,11 @@ const Jobs = () => {
                         onClick={() => applyStatusChange(booking.id, 'in_progress')}
                         className="flex items-center gap-1 text-primary hover:bg-primary/10 px-3 py-1 rounded-lg transition-colors disabled:opacity-50"
                       >
-                        <CheckCircle size={16} />
+                        {updatingId === booking.id ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <CheckCircle size={16} />
+                        )}
                         <span className="text-xs font-medium">Assign</span>
                       </button>
                     )}
@@ -192,7 +206,11 @@ const Jobs = () => {
                         onClick={() => applyStatusChange(booking.id, 'completed')}
                         className="flex items-center gap-1 text-success hover:bg-success/10 px-3 py-1 rounded-lg transition-colors disabled:opacity-50"
                       >
-                        <CheckCircle size={16} />
+                        {updatingId === booking.id ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <CheckCircle size={16} />
+                        )}
                         <span className="text-xs font-medium">Complete</span>
                       </button>
                     )}

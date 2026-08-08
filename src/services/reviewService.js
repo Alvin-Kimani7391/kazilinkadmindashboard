@@ -1,43 +1,35 @@
-import { db } from "../firebase";
-import {
-  collection,
-  doc,
-  getDocs,
-  getDoc,
-  deleteDoc,
-  query,
-  orderBy,
-} from "firebase/firestore";
+import { dataConnect } from "../dataconnect";
+import { listReviews, deleteReview as deleteReviewMutation } from "@dataconnect/admin-generated";
 
-const reviewsRef = collection(db, "Review");
+const flattenReview = (r) => ({
+  id: r.id,
+  rating: r.rating ?? 0,
+  comment: r.comment || "",
+  createdAt: r.createdAt,
+  bookingId: r.booking?.id || null,
+  client: r.client?.name || r.booking?.client?.name || "Unknown client",
+  category: r.booking?.category?.name || null,
+  provider: r.booking?.provider?.name || null,
+});
 
 /**
- * Fetch all reviews, newest first.
+ * Fetch all reviews sorted newest first.
  */
 export const getReviews = async () => {
   try {
-    const q = query(reviewsRef, orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    const { data } = await listReviews(dataConnect);
+    return (data?.reviews || [])
+      .map(flattenReview)
+      .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   } catch (error) {
     console.error("reviewService.getReviews error:", error);
     throw error;
   }
 };
 
-export const getReviewById = async (reviewId) => {
-  try {
-    const snap = await getDoc(doc(db, "Review", reviewId));
-    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
-  } catch (error) {
-    console.error("reviewService.getReviewById error:", error);
-    throw error;
-  }
-};
-
 export const deleteReview = async (reviewId) => {
   try {
-    await deleteDoc(doc(db, "Review", reviewId));
+    await deleteReviewMutation(dataConnect, { id: reviewId });
     return true;
   } catch (error) {
     console.error("reviewService.deleteReview error:", error);

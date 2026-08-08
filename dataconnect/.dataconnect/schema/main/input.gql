@@ -1,0 +1,2432 @@
+"""
+✨ `Booking_KeyOutput` returns the primary key fields of table type `Booking`.
+
+It has the same format as `Booking_Key`, but is only used as mutation return value.
+"""
+scalar Booking_KeyOutput
+"""
+✨ `Conversation_KeyOutput` returns the primary key fields of table type `Conversation`.
+
+It has the same format as `Conversation_Key`, but is only used as mutation return value.
+"""
+scalar Conversation_KeyOutput
+"""
+✨ `Message_KeyOutput` returns the primary key fields of table type `Message`.
+
+It has the same format as `Message_Key`, but is only used as mutation return value.
+"""
+scalar Message_KeyOutput
+"""
+✨ `Notification_KeyOutput` returns the primary key fields of table type `Notification`.
+
+It has the same format as `Notification_Key`, but is only used as mutation return value.
+"""
+scalar Notification_KeyOutput
+"""
+✨ `Review_KeyOutput` returns the primary key fields of table type `Review`.
+
+It has the same format as `Review_Key`, but is only used as mutation return value.
+"""
+scalar Review_KeyOutput
+"""
+✨ `ServiceCategory_KeyOutput` returns the primary key fields of table type `ServiceCategory`.
+
+It has the same format as `ServiceCategory_Key`, but is only used as mutation return value.
+"""
+scalar ServiceCategory_KeyOutput
+"""
+✨ `User_KeyOutput` returns the primary key fields of table type `User`.
+
+It has the same format as `User_Key`, but is only used as mutation return value.
+"""
+scalar User_KeyOutput
+"""
+✨ `WorkSession_KeyOutput` returns the primary key fields of table type `WorkSession`.
+
+It has the same format as `WorkSession_Key`, but is only used as mutation return value.
+"""
+scalar WorkSession_KeyOutput
+"""
+✨ Generated data input type for table 'Booking'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Booking_Data {
+  """
+  ✨ Generated from Field `Booking`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Booking`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`categoryId` of type `UUID!`
+  """
+  categoryId: UUID
+  """
+  ✨ `_expr` server value variant of `categoryId` (✨ Generated from Field `Booking`.`categoryId` of type `UUID!`)
+  """
+  categoryId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`clientId` of type `UUID!`
+  """
+  clientId: UUID
+  """
+  ✨ `_expr` server value variant of `clientId` (✨ Generated from Field `Booking`.`clientId` of type `UUID!`)
+  """
+  clientId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`providerId` of type `UUID!`
+  """
+  providerId: UUID
+  """
+  ✨ `_expr` server value variant of `providerId` (✨ Generated from Field `Booking`.`providerId` of type `UUID!`)
+  """
+  providerId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`category` of type `ServiceCategory!`
+  """
+  category: ServiceCategory_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`client` of type `User!`
+  """
+  client: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`provider` of type `User!`
+  """
+  provider: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`endTime` of type `Timestamp!`
+  """
+  endTime: Timestamp
+  """
+  ✨ `_expr` server value variant of `endTime` (✨ Generated from Field `Booking`.`endTime` of type `Timestamp!`)
+  """
+  endTime_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `endTime` (✨ Generated from Field `Booking`.`endTime` of type `Timestamp!`)
+  """
+  endTime_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `endTime` (✨ Generated from Field `Booking`.`endTime` of type `Timestamp!`)
+  """
+  endTime_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`serviceLocation` of type `String`
+  """
+  serviceLocation: String
+  """
+  ✨ `_expr` server value variant of `serviceLocation` (✨ Generated from Field `Booking`.`serviceLocation` of type `String`)
+  """
+  serviceLocation_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`startTime` of type `Timestamp!`
+  """
+  startTime: Timestamp
+  """
+  ✨ `_expr` server value variant of `startTime` (✨ Generated from Field `Booking`.`startTime` of type `Timestamp!`)
+  """
+  startTime_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `startTime` (✨ Generated from Field `Booking`.`startTime` of type `Timestamp!`)
+  """
+  startTime_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `startTime` (✨ Generated from Field `Booking`.`startTime` of type `Timestamp!`)
+  """
+  startTime_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Booking`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds` of type `Int`
+  """
+  totalDurationSeconds: Int
+  """
+  ✨ `_expr` server value variant of `totalDurationSeconds` (✨ Generated from Field `Booking`.`totalDurationSeconds` of type `Int`)
+  """
+  totalDurationSeconds_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `totalDurationSeconds` (✨ Generated from Field `Booking`.`totalDurationSeconds` of type `Int`)
+  """
+  totalDurationSeconds_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Booking`.`reviews_on_booking` of type `[Review!]!`
+  """
+  reviews_on_booking: [Review_Data!]
+  """
+  ✨ Generated from Field `Booking`.`workSessions_on_booking` of type `[WorkSession!]!`
+  """
+  workSessions_on_booking: [WorkSession_Data!]
+}
+"""
+✨ Generated filter input type for table 'Booking'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Booking_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Booking_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Booking_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Booking_Filter!]
+  """
+  ✨ Generated from Field `Booking`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Booking`.`categoryId` of type `UUID!`
+  """
+  categoryId: UUID_Filter
+  """
+  ✨ Generated from Field `Booking`.`clientId` of type `UUID!`
+  """
+  clientId: UUID_Filter
+  """
+  ✨ Generated from Field `Booking`.`providerId` of type `UUID!`
+  """
+  providerId: UUID_Filter
+  """
+  ✨ Generated from Field `Booking`.`category` of type `ServiceCategory!`
+  """
+  category: ServiceCategory_Filter
+  """
+  ✨ Generated from Field `Booking`.`client` of type `User!`
+  """
+  client: User_Filter
+  """
+  ✨ Generated from Field `Booking`.`provider` of type `User!`
+  """
+  provider: User_Filter
+  """
+  ✨ Generated from Field `Booking`.`endTime` of type `Timestamp!`
+  """
+  endTime: Timestamp_Filter
+  """
+  ✨ Generated from Field `Booking`.`serviceLocation` of type `String`
+  """
+  serviceLocation: String_Filter
+  """
+  ✨ Generated from Field `Booking`.`startTime` of type `Timestamp!`
+  """
+  startTime: Timestamp_Filter
+  """
+  ✨ Generated from Field `Booking`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds` of type `Int`
+  """
+  totalDurationSeconds: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`reviews_on_booking` of type `[Review!]!`
+  """
+  reviews_on_booking: Review_ListFilter
+  """
+  ✨ Generated from Field `Booking`.`workSessions_on_booking` of type `[WorkSession!]!`
+  """
+  workSessions_on_booking: WorkSession_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Booking'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Booking_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Booking_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Booking_Filter
+}
+"""
+✨ Generated having input type for table 'Booking'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Booking_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Booking_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Booking_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Booking_Having!]
+  """
+  ✨ Generated from Field `Booking`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`categoryId_count` of type `Int!`
+  """
+  categoryId_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`clientId_count` of type `Int!`
+  """
+  clientId_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`endTime_count` of type `Int!`
+  """
+  endTime_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`providerId_count` of type `Int!`
+  """
+  providerId_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`serviceLocation_count` of type `Int!`
+  """
+  serviceLocation_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`startTime_count` of type `Int!`
+  """
+  startTime_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_count` of type `Int!`
+  """
+  totalDurationSeconds_count: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_sum` of type `Int`
+  """
+  totalDurationSeconds_sum: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_avg` of type `Float`
+  """
+  totalDurationSeconds_avg: Float_Filter
+  """
+  ✨ Generated from Field `Booking`.`endTime_min` of type `Timestamp`
+  """
+  endTime_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Booking`.`startTime_min` of type `Timestamp`
+  """
+  startTime_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_min` of type `Int`
+  """
+  totalDurationSeconds_min: Int_Filter
+  """
+  ✨ Generated from Field `Booking`.`endTime_max` of type `Timestamp`
+  """
+  endTime_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Booking`.`startTime_max` of type `Timestamp`
+  """
+  startTime_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_max` of type `Int`
+  """
+  totalDurationSeconds_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Booking'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Booking_Key {
+  """
+  ✨ Generated from Field `Booking`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Booking`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Booking'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Booking_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Booking_Filter
+}
+"""
+✨ Generated order input type for table 'Booking'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Booking_Order {
+  """
+  ✨ Generated from Field `Booking`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`categoryId` of type `UUID!`
+  """
+  categoryId: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`clientId` of type `UUID!`
+  """
+  clientId: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`providerId` of type `UUID!`
+  """
+  providerId: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`category` of type `ServiceCategory!`
+  """
+  category: ServiceCategory_Order
+  """
+  ✨ Generated from Field `Booking`.`client` of type `User!`
+  """
+  client: User_Order
+  """
+  ✨ Generated from Field `Booking`.`provider` of type `User!`
+  """
+  provider: User_Order
+  """
+  ✨ Generated from Field `Booking`.`endTime` of type `Timestamp!`
+  """
+  endTime: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`serviceLocation` of type `String`
+  """
+  serviceLocation: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`startTime` of type `Timestamp!`
+  """
+  startTime: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds` of type `Int`
+  """
+  totalDurationSeconds: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`categoryId_count` of type `Int!`
+  """
+  categoryId_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`clientId_count` of type `Int!`
+  """
+  clientId_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`endTime_count` of type `Int!`
+  """
+  endTime_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`providerId_count` of type `Int!`
+  """
+  providerId_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`serviceLocation_count` of type `Int!`
+  """
+  serviceLocation_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`startTime_count` of type `Int!`
+  """
+  startTime_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_count` of type `Int!`
+  """
+  totalDurationSeconds_count: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_sum` of type `Int`
+  """
+  totalDurationSeconds_sum: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_avg` of type `Float`
+  """
+  totalDurationSeconds_avg: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`endTime_min` of type `Timestamp`
+  """
+  endTime_min: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`startTime_min` of type `Timestamp`
+  """
+  startTime_min: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_min` of type `Int`
+  """
+  totalDurationSeconds_min: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`endTime_max` of type `Timestamp`
+  """
+  endTime_max: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`startTime_max` of type `Timestamp`
+  """
+  startTime_max: OrderDirection
+  """
+  ✨ Generated from Field `Booking`.`totalDurationSeconds_max` of type `Int`
+  """
+  totalDurationSeconds_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Conversation'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Conversation_Data {
+  """
+  ✨ Generated from Field `Conversation`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Conversation`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Conversation`.`clientId` of type `UUID!`
+  """
+  clientId: UUID
+  """
+  ✨ `_expr` server value variant of `clientId` (✨ Generated from Field `Conversation`.`clientId` of type `UUID!`)
+  """
+  clientId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Conversation`.`providerId` of type `UUID!`
+  """
+  providerId: UUID
+  """
+  ✨ `_expr` server value variant of `providerId` (✨ Generated from Field `Conversation`.`providerId` of type `UUID!`)
+  """
+  providerId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Conversation`.`client` of type `User!`
+  """
+  client: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Conversation`.`provider` of type `User!`
+  """
+  provider: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Conversation`.`lastMessagePreview` of type `String`
+  """
+  lastMessagePreview: String
+  """
+  ✨ `_expr` server value variant of `lastMessagePreview` (✨ Generated from Field `Conversation`.`lastMessagePreview` of type `String`)
+  """
+  lastMessagePreview_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `Conversation`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Conversation`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Conversation`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Conversation`.`messages_on_conversation` of type `[Message!]!`
+  """
+  messages_on_conversation: [Message_Data!]
+}
+"""
+✨ Generated filter input type for table 'Conversation'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Conversation_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Conversation_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Conversation_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Conversation_Filter!]
+  """
+  ✨ Generated from Field `Conversation`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Conversation`.`clientId` of type `UUID!`
+  """
+  clientId: UUID_Filter
+  """
+  ✨ Generated from Field `Conversation`.`providerId` of type `UUID!`
+  """
+  providerId: UUID_Filter
+  """
+  ✨ Generated from Field `Conversation`.`client` of type `User!`
+  """
+  client: User_Filter
+  """
+  ✨ Generated from Field `Conversation`.`provider` of type `User!`
+  """
+  provider: User_Filter
+  """
+  ✨ Generated from Field `Conversation`.`lastMessagePreview` of type `String`
+  """
+  lastMessagePreview: String_Filter
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Conversation`.`messages_on_conversation` of type `[Message!]!`
+  """
+  messages_on_conversation: Message_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Conversation'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Conversation_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Conversation_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Conversation_Filter
+}
+"""
+✨ Generated having input type for table 'Conversation'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Conversation_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Conversation_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Conversation_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Conversation_Having!]
+  """
+  ✨ Generated from Field `Conversation`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Conversation`.`clientId_count` of type `Int!`
+  """
+  clientId_count: Int_Filter
+  """
+  ✨ Generated from Field `Conversation`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Conversation`.`lastMessagePreview_count` of type `Int!`
+  """
+  lastMessagePreview_count: Int_Filter
+  """
+  ✨ Generated from Field `Conversation`.`providerId_count` of type `Int!`
+  """
+  providerId_count: Int_Filter
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Conversation'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Conversation_Key {
+  """
+  ✨ Generated from Field `Conversation`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Conversation`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Conversation'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Conversation_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Conversation_Filter
+}
+"""
+✨ Generated order input type for table 'Conversation'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Conversation_Order {
+  """
+  ✨ Generated from Field `Conversation`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`clientId` of type `UUID!`
+  """
+  clientId: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`providerId` of type `UUID!`
+  """
+  providerId: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`client` of type `User!`
+  """
+  client: User_Order
+  """
+  ✨ Generated from Field `Conversation`.`provider` of type `User!`
+  """
+  provider: User_Order
+  """
+  ✨ Generated from Field `Conversation`.`lastMessagePreview` of type `String`
+  """
+  lastMessagePreview: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`clientId_count` of type `Int!`
+  """
+  clientId_count: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`lastMessagePreview_count` of type `Int!`
+  """
+  lastMessagePreview_count: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`providerId_count` of type `Int!`
+  """
+  providerId_count: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Conversation`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Message'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Message_Data {
+  """
+  ✨ Generated from Field `Message`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Message`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Message`.`conversationId` of type `UUID!`
+  """
+  conversationId: UUID
+  """
+  ✨ `_expr` server value variant of `conversationId` (✨ Generated from Field `Message`.`conversationId` of type `UUID!`)
+  """
+  conversationId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Message`.`senderId` of type `UUID!`
+  """
+  senderId: UUID
+  """
+  ✨ `_expr` server value variant of `senderId` (✨ Generated from Field `Message`.`senderId` of type `UUID!`)
+  """
+  senderId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Message`.`conversation` of type `Conversation!`
+  """
+  conversation: Conversation_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Message`.`sender` of type `User!`
+  """
+  sender: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Message`.`content` of type `String!`
+  """
+  content: String
+  """
+  ✨ `_expr` server value variant of `content` (✨ Generated from Field `Message`.`content` of type `String!`)
+  """
+  content_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Message`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp
+  """
+  ✨ `_expr` server value variant of `timestamp` (✨ Generated from Field `Message`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `timestamp` (✨ Generated from Field `Message`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `timestamp` (✨ Generated from Field `Message`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Message'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Message_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Message_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Message_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Message_Filter!]
+  """
+  ✨ Generated from Field `Message`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Message`.`conversationId` of type `UUID!`
+  """
+  conversationId: UUID_Filter
+  """
+  ✨ Generated from Field `Message`.`senderId` of type `UUID!`
+  """
+  senderId: UUID_Filter
+  """
+  ✨ Generated from Field `Message`.`conversation` of type `Conversation!`
+  """
+  conversation: Conversation_Filter
+  """
+  ✨ Generated from Field `Message`.`sender` of type `User!`
+  """
+  sender: User_Filter
+  """
+  ✨ Generated from Field `Message`.`content` of type `String!`
+  """
+  content: String_Filter
+  """
+  ✨ Generated from Field `Message`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'Message'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Message_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Message_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Message_Filter
+}
+"""
+✨ Generated having input type for table 'Message'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Message_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Message_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Message_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Message_Having!]
+  """
+  ✨ Generated from Field `Message`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Message`.`content_count` of type `Int!`
+  """
+  content_count: Int_Filter
+  """
+  ✨ Generated from Field `Message`.`conversationId_count` of type `Int!`
+  """
+  conversationId_count: Int_Filter
+  """
+  ✨ Generated from Field `Message`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Message`.`senderId_count` of type `Int!`
+  """
+  senderId_count: Int_Filter
+  """
+  ✨ Generated from Field `Message`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: Int_Filter
+  """
+  ✨ Generated from Field `Message`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Message`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Message'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Message_Key {
+  """
+  ✨ Generated from Field `Message`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Message`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Message'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Message_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Message_Filter
+}
+"""
+✨ Generated order input type for table 'Message'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Message_Order {
+  """
+  ✨ Generated from Field `Message`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`conversationId` of type `UUID!`
+  """
+  conversationId: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`senderId` of type `UUID!`
+  """
+  senderId: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`conversation` of type `Conversation!`
+  """
+  conversation: Conversation_Order
+  """
+  ✨ Generated from Field `Message`.`sender` of type `User!`
+  """
+  sender: User_Order
+  """
+  ✨ Generated from Field `Message`.`content` of type `String!`
+  """
+  content: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`content_count` of type `Int!`
+  """
+  content_count: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`conversationId_count` of type `Int!`
+  """
+  conversationId_count: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`senderId_count` of type `Int!`
+  """
+  senderId_count: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: OrderDirection
+  """
+  ✨ Generated from Field `Message`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Notification'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Notification_Data {
+  """
+  ✨ Generated from Field `Notification`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Notification`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notification`.`recipientId` of type `UUID!`
+  """
+  recipientId: UUID
+  """
+  ✨ `_expr` server value variant of `recipientId` (✨ Generated from Field `Notification`.`recipientId` of type `UUID!`)
+  """
+  recipientId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notification`.`recipient` of type `User!`
+  """
+  recipient: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notification`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Notification`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Notification`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Notification`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notification`.`isRead` of type `Boolean!`
+  """
+  isRead: Boolean
+  """
+  ✨ `_expr` server value variant of `isRead` (✨ Generated from Field `Notification`.`isRead` of type `Boolean!`)
+  """
+  isRead_expr: Boolean_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notification`.`message` of type `String!`
+  """
+  message: String
+  """
+  ✨ `_expr` server value variant of `message` (✨ Generated from Field `Notification`.`message` of type `String!`)
+  """
+  message_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notification`.`title` of type `String!`
+  """
+  title: String
+  """
+  ✨ `_expr` server value variant of `title` (✨ Generated from Field `Notification`.`title` of type `String!`)
+  """
+  title_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Notification'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Notification_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Notification_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Notification_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Notification_Filter!]
+  """
+  ✨ Generated from Field `Notification`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Notification`.`recipientId` of type `UUID!`
+  """
+  recipientId: UUID_Filter
+  """
+  ✨ Generated from Field `Notification`.`recipient` of type `User!`
+  """
+  recipient: User_Filter
+  """
+  ✨ Generated from Field `Notification`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Notification`.`isRead` of type `Boolean!`
+  """
+  isRead: Boolean_Filter
+  """
+  ✨ Generated from Field `Notification`.`message` of type `String!`
+  """
+  message: String_Filter
+  """
+  ✨ Generated from Field `Notification`.`title` of type `String!`
+  """
+  title: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'Notification'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Notification_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Notification_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Notification_Filter
+}
+"""
+✨ Generated having input type for table 'Notification'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Notification_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Notification_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Notification_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Notification_Having!]
+  """
+  ✨ Generated from Field `Notification`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Notification`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Notification`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Notification`.`isRead_count` of type `Int!`
+  """
+  isRead_count: Int_Filter
+  """
+  ✨ Generated from Field `Notification`.`message_count` of type `Int!`
+  """
+  message_count: Int_Filter
+  """
+  ✨ Generated from Field `Notification`.`recipientId_count` of type `Int!`
+  """
+  recipientId_count: Int_Filter
+  """
+  ✨ Generated from Field `Notification`.`title_count` of type `Int!`
+  """
+  title_count: Int_Filter
+  """
+  ✨ Generated from Field `Notification`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Notification`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Notification'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Notification_Key {
+  """
+  ✨ Generated from Field `Notification`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Notification`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Notification'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Notification_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Notification_Filter
+}
+"""
+✨ Generated order input type for table 'Notification'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Notification_Order {
+  """
+  ✨ Generated from Field `Notification`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`recipientId` of type `UUID!`
+  """
+  recipientId: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`recipient` of type `User!`
+  """
+  recipient: User_Order
+  """
+  ✨ Generated from Field `Notification`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`isRead` of type `Boolean!`
+  """
+  isRead: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`message` of type `String!`
+  """
+  message: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`title` of type `String!`
+  """
+  title: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`isRead_count` of type `Int!`
+  """
+  isRead_count: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`message_count` of type `Int!`
+  """
+  message_count: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`recipientId_count` of type `Int!`
+  """
+  recipientId_count: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`title_count` of type `Int!`
+  """
+  title_count: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Notification`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Review'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Review_Data {
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Review`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Review`.`bookingId` of type `UUID!`
+  """
+  bookingId: UUID
+  """
+  ✨ `_expr` server value variant of `bookingId` (✨ Generated from Field `Review`.`bookingId` of type `UUID!`)
+  """
+  bookingId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Review`.`clientId` of type `UUID!`
+  """
+  clientId: UUID
+  """
+  ✨ `_expr` server value variant of `clientId` (✨ Generated from Field `Review`.`clientId` of type `UUID!`)
+  """
+  clientId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Review`.`booking` of type `Booking!`
+  """
+  booking: Booking_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Review`.`client` of type `User!`
+  """
+  client: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Review`.`comment` of type `String`
+  """
+  comment: String
+  """
+  ✨ `_expr` server value variant of `comment` (✨ Generated from Field `Review`.`comment` of type `String`)
+  """
+  comment_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Review`.`rating` of type `Int!`
+  """
+  rating: Int
+  """
+  ✨ `_expr` server value variant of `rating` (✨ Generated from Field `Review`.`rating` of type `Int!`)
+  """
+  rating_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `rating` (✨ Generated from Field `Review`.`rating` of type `Int!`)
+  """
+  rating_update: [Int_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Review'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Review_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Review_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Review_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Review_Filter!]
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Review`.`bookingId` of type `UUID!`
+  """
+  bookingId: UUID_Filter
+  """
+  ✨ Generated from Field `Review`.`clientId` of type `UUID!`
+  """
+  clientId: UUID_Filter
+  """
+  ✨ Generated from Field `Review`.`booking` of type `Booking!`
+  """
+  booking: Booking_Filter
+  """
+  ✨ Generated from Field `Review`.`client` of type `User!`
+  """
+  client: User_Filter
+  """
+  ✨ Generated from Field `Review`.`comment` of type `String`
+  """
+  comment: String_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Review`.`rating` of type `Int!`
+  """
+  rating: Int_Filter
+}
+"""
+✨ Generated first-row input type for table 'Review'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Review_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Review_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Review_Filter
+}
+"""
+✨ Generated having input type for table 'Review'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Review_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Review_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Review_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Review_Having!]
+  """
+  ✨ Generated from Field `Review`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`bookingId_count` of type `Int!`
+  """
+  bookingId_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`clientId_count` of type `Int!`
+  """
+  clientId_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`comment_count` of type `Int!`
+  """
+  comment_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_count` of type `Int!`
+  """
+  rating_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_sum` of type `Int`
+  """
+  rating_sum: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_avg` of type `Float`
+  """
+  rating_avg: Float_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_min` of type `Int`
+  """
+  rating_min: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_max` of type `Int`
+  """
+  rating_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Review'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Review_Key {
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Review`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Review'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Review_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Review_Filter
+}
+"""
+✨ Generated order input type for table 'Review'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Review_Order {
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`bookingId` of type `UUID!`
+  """
+  bookingId: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`clientId` of type `UUID!`
+  """
+  clientId: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`booking` of type `Booking!`
+  """
+  booking: Booking_Order
+  """
+  ✨ Generated from Field `Review`.`client` of type `User!`
+  """
+  client: User_Order
+  """
+  ✨ Generated from Field `Review`.`comment` of type `String`
+  """
+  comment: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating` of type `Int!`
+  """
+  rating: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`bookingId_count` of type `Int!`
+  """
+  bookingId_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`clientId_count` of type `Int!`
+  """
+  clientId_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`comment_count` of type `Int!`
+  """
+  comment_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_count` of type `Int!`
+  """
+  rating_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_sum` of type `Int`
+  """
+  rating_sum: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_avg` of type `Float`
+  """
+  rating_avg: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_min` of type `Int`
+  """
+  rating_min: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_max` of type `Int`
+  """
+  rating_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'ServiceCategory'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input ServiceCategory_Data {
+  """
+  ✨ Generated from Field `ServiceCategory`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `ServiceCategory`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ServiceCategory`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `ServiceCategory`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ServiceCategory`.`bookings_on_category` of type `[Booking!]!`
+  """
+  bookings_on_category: [Booking_Data!]
+}
+"""
+✨ Generated filter input type for table 'ServiceCategory'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input ServiceCategory_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [ServiceCategory_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: ServiceCategory_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [ServiceCategory_Filter!]
+  """
+  ✨ Generated from Field `ServiceCategory`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `ServiceCategory`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `ServiceCategory`.`bookings_on_category` of type `[Booking!]!`
+  """
+  bookings_on_category: Booking_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'ServiceCategory'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input ServiceCategory_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [ServiceCategory_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: ServiceCategory_Filter
+}
+"""
+✨ Generated having input type for table 'ServiceCategory'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input ServiceCategory_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [ServiceCategory_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: ServiceCategory_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [ServiceCategory_Having!]
+  """
+  ✨ Generated from Field `ServiceCategory`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `ServiceCategory`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `ServiceCategory`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'ServiceCategory'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input ServiceCategory_Key {
+  """
+  ✨ Generated from Field `ServiceCategory`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `ServiceCategory`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'ServiceCategory'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input ServiceCategory_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: ServiceCategory_Filter
+}
+"""
+✨ Generated order input type for table 'ServiceCategory'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input ServiceCategory_Order {
+  """
+  ✨ Generated from Field `ServiceCategory`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `ServiceCategory`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `ServiceCategory`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `ServiceCategory`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `ServiceCategory`.`name_count` of type `Int!`
+  """
+  name_count: OrderDirection
+}
+"""
+✨ Generated data input type for table 'User'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input User_Data {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`bio` of type `String`
+  """
+  bio: String
+  """
+  ✨ `_expr` server value variant of `bio` (✨ Generated from Field `User`.`bio` of type `String`)
+  """
+  bio_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `User`.`email` of type `String!`)
+  """
+  email_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`hourlyRate` of type `Float`
+  """
+  hourlyRate: Float
+  """
+  ✨ `_expr` server value variant of `hourlyRate` (✨ Generated from Field `User`.`hourlyRate` of type `Float`)
+  """
+  hourlyRate_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `hourlyRate` (✨ Generated from Field `User`.`hourlyRate` of type `Float`)
+  """
+  hourlyRate_update: [Float_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `User`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`phoneNumber` of type `String!`
+  """
+  phoneNumber: String
+  """
+  ✨ `_expr` server value variant of `phoneNumber` (✨ Generated from Field `User`.`phoneNumber` of type `String!`)
+  """
+  phoneNumber_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`profilePicture` of type `String`
+  """
+  profilePicture: String
+  """
+  ✨ `_expr` server value variant of `profilePicture` (✨ Generated from Field `User`.`profilePicture` of type `String`)
+  """
+  profilePicture_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`role` of type `String!`
+  """
+  role: String
+  """
+  ✨ `_expr` server value variant of `role` (✨ Generated from Field `User`.`role` of type `String!`)
+  """
+  role_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`bookings_on_client` of type `[Booking!]!`
+  """
+  bookings_on_client: [Booking_Data!]
+  """
+  ✨ Generated from Field `User`.`bookings_on_provider` of type `[Booking!]!`
+  """
+  bookings_on_provider: [Booking_Data!]
+  """
+  ✨ Generated from Field `User`.`conversations_on_client` of type `[Conversation!]!`
+  """
+  conversations_on_client: [Conversation_Data!]
+  """
+  ✨ Generated from Field `User`.`conversations_on_provider` of type `[Conversation!]!`
+  """
+  conversations_on_provider: [Conversation_Data!]
+  """
+  ✨ Generated from Field `User`.`messages_on_sender` of type `[Message!]!`
+  """
+  messages_on_sender: [Message_Data!]
+  """
+  ✨ Generated from Field `User`.`notifications_on_recipient` of type `[Notification!]!`
+  """
+  notifications_on_recipient: [Notification_Data!]
+  """
+  ✨ Generated from Field `User`.`reviews_on_client` of type `[Review!]!`
+  """
+  reviews_on_client: [Review_Data!]
+}
+"""
+✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [User_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: User_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [User_Filter!]
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `User`.`bio` of type `String`
+  """
+  bio: String_Filter
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `User`.`hourlyRate` of type `Float`
+  """
+  hourlyRate: Float_Filter
+  """
+  ✨ Generated from Field `User`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `User`.`phoneNumber` of type `String!`
+  """
+  phoneNumber: String_Filter
+  """
+  ✨ Generated from Field `User`.`profilePicture` of type `String`
+  """
+  profilePicture: String_Filter
+  """
+  ✨ Generated from Field `User`.`role` of type `String!`
+  """
+  role: String_Filter
+  """
+  ✨ Generated from Field `User`.`bookings_on_client` of type `[Booking!]!`
+  """
+  bookings_on_client: Booking_ListFilter
+  """
+  ✨ Generated from Field `User`.`bookings_on_provider` of type `[Booking!]!`
+  """
+  bookings_on_provider: Booking_ListFilter
+  """
+  ✨ Generated from Field `User`.`conversations_on_client` of type `[Conversation!]!`
+  """
+  conversations_on_client: Conversation_ListFilter
+  """
+  ✨ Generated from Field `User`.`conversations_on_provider` of type `[Conversation!]!`
+  """
+  conversations_on_provider: Conversation_ListFilter
+  """
+  ✨ Generated from Field `User`.`messages_on_sender` of type `[Message!]!`
+  """
+  messages_on_sender: Message_ListFilter
+  """
+  ✨ Generated from Field `User`.`notifications_on_recipient` of type `[Notification!]!`
+  """
+  notifications_on_recipient: Notification_ListFilter
+  """
+  ✨ Generated from Field `User`.`reviews_on_client` of type `[Review!]!`
+  """
+  reviews_on_client: Review_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'User'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input User_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [User_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: User_Filter
+}
+"""
+✨ Generated having input type for table 'User'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [User_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: User_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [User_Having!]
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`bio_count` of type `Int!`
+  """
+  bio_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`hourlyRate_count` of type `Int!`
+  """
+  hourlyRate_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`phoneNumber_count` of type `Int!`
+  """
+  phoneNumber_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`profilePicture_count` of type `Int!`
+  """
+  profilePicture_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`role_count` of type `Int!`
+  """
+  role_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`hourlyRate_sum` of type `Float`
+  """
+  hourlyRate_sum: Float_Filter
+  """
+  ✨ Generated from Field `User`.`hourlyRate_avg` of type `Float`
+  """
+  hourlyRate_avg: Float_Filter
+  """
+  ✨ Generated from Field `User`.`hourlyRate_min` of type `Float`
+  """
+  hourlyRate_min: Float_Filter
+  """
+  ✨ Generated from Field `User`.`hourlyRate_max` of type `Float`
+  """
+  hourlyRate_max: Float_Filter
+}
+"""
+✨ Generated key input type for table 'User'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input User_Key {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'User'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input User_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: User_Filter
+}
+"""
+✨ Generated order input type for table 'User'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input User_Order {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `User`.`bio` of type `String`
+  """
+  bio: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: OrderDirection
+  """
+  ✨ Generated from Field `User`.`hourlyRate` of type `Float`
+  """
+  hourlyRate: OrderDirection
+  """
+  ✨ Generated from Field `User`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `User`.`phoneNumber` of type `String!`
+  """
+  phoneNumber: OrderDirection
+  """
+  ✨ Generated from Field `User`.`profilePicture` of type `String`
+  """
+  profilePicture: OrderDirection
+  """
+  ✨ Generated from Field `User`.`role` of type `String!`
+  """
+  role: OrderDirection
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`bio_count` of type `Int!`
+  """
+  bio_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`hourlyRate_count` of type `Int!`
+  """
+  hourlyRate_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`name_count` of type `Int!`
+  """
+  name_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`phoneNumber_count` of type `Int!`
+  """
+  phoneNumber_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`profilePicture_count` of type `Int!`
+  """
+  profilePicture_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`role_count` of type `Int!`
+  """
+  role_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`hourlyRate_sum` of type `Float`
+  """
+  hourlyRate_sum: OrderDirection
+  """
+  ✨ Generated from Field `User`.`hourlyRate_avg` of type `Float`
+  """
+  hourlyRate_avg: OrderDirection
+  """
+  ✨ Generated from Field `User`.`hourlyRate_min` of type `Float`
+  """
+  hourlyRate_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`hourlyRate_max` of type `Float`
+  """
+  hourlyRate_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'WorkSession'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input WorkSession_Data {
+  """
+  ✨ Generated from Field `WorkSession`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `WorkSession`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `WorkSession`.`bookingId` of type `UUID!`
+  """
+  bookingId: UUID
+  """
+  ✨ `_expr` server value variant of `bookingId` (✨ Generated from Field `WorkSession`.`bookingId` of type `UUID!`)
+  """
+  bookingId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `WorkSession`.`booking` of type `Booking!`
+  """
+  booking: Booking_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp` of type `Timestamp`
+  """
+  endTimestamp: Timestamp
+  """
+  ✨ `_expr` server value variant of `endTimestamp` (✨ Generated from Field `WorkSession`.`endTimestamp` of type `Timestamp`)
+  """
+  endTimestamp_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `endTimestamp` (✨ Generated from Field `WorkSession`.`endTimestamp` of type `Timestamp`)
+  """
+  endTimestamp_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `endTimestamp` (✨ Generated from Field `WorkSession`.`endTimestamp` of type `Timestamp`)
+  """
+  endTimestamp_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `WorkSession`.`notes` of type `String`
+  """
+  notes: String
+  """
+  ✨ `_expr` server value variant of `notes` (✨ Generated from Field `WorkSession`.`notes` of type `String`)
+  """
+  notes_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp` of type `Timestamp!`
+  """
+  startTimestamp: Timestamp
+  """
+  ✨ `_expr` server value variant of `startTimestamp` (✨ Generated from Field `WorkSession`.`startTimestamp` of type `Timestamp!`)
+  """
+  startTimestamp_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `startTimestamp` (✨ Generated from Field `WorkSession`.`startTimestamp` of type `Timestamp!`)
+  """
+  startTimestamp_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `startTimestamp` (✨ Generated from Field `WorkSession`.`startTimestamp` of type `Timestamp!`)
+  """
+  startTimestamp_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'WorkSession'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input WorkSession_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [WorkSession_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: WorkSession_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [WorkSession_Filter!]
+  """
+  ✨ Generated from Field `WorkSession`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`bookingId` of type `UUID!`
+  """
+  bookingId: UUID_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`booking` of type `Booking!`
+  """
+  booking: Booking_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp` of type `Timestamp`
+  """
+  endTimestamp: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`notes` of type `String`
+  """
+  notes: String_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp` of type `Timestamp!`
+  """
+  startTimestamp: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'WorkSession'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input WorkSession_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [WorkSession_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: WorkSession_Filter
+}
+"""
+✨ Generated having input type for table 'WorkSession'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input WorkSession_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [WorkSession_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: WorkSession_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [WorkSession_Having!]
+  """
+  ✨ Generated from Field `WorkSession`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`bookingId_count` of type `Int!`
+  """
+  bookingId_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp_count` of type `Int!`
+  """
+  endTimestamp_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`notes_count` of type `Int!`
+  """
+  notes_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp_count` of type `Int!`
+  """
+  startTimestamp_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp_min` of type `Timestamp`
+  """
+  endTimestamp_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp_min` of type `Timestamp`
+  """
+  startTimestamp_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp_max` of type `Timestamp`
+  """
+  endTimestamp_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp_max` of type `Timestamp`
+  """
+  startTimestamp_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'WorkSession'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input WorkSession_Key {
+  """
+  ✨ Generated from Field `WorkSession`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `WorkSession`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'WorkSession'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input WorkSession_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: WorkSession_Filter
+}
+"""
+✨ Generated order input type for table 'WorkSession'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input WorkSession_Order {
+  """
+  ✨ Generated from Field `WorkSession`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`bookingId` of type `UUID!`
+  """
+  bookingId: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`booking` of type `Booking!`
+  """
+  booking: Booking_Order
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp` of type `Timestamp`
+  """
+  endTimestamp: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`notes` of type `String`
+  """
+  notes: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp` of type `Timestamp!`
+  """
+  startTimestamp: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`bookingId_count` of type `Int!`
+  """
+  bookingId_count: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp_count` of type `Int!`
+  """
+  endTimestamp_count: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`notes_count` of type `Int!`
+  """
+  notes_count: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp_count` of type `Int!`
+  """
+  startTimestamp_count: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp_min` of type `Timestamp`
+  """
+  endTimestamp_min: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp_min` of type `Timestamp`
+  """
+  startTimestamp_min: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`endTimestamp_max` of type `Timestamp`
+  """
+  endTimestamp_max: OrderDirection
+  """
+  ✨ Generated from Field `WorkSession`.`startTimestamp_max` of type `Timestamp`
+  """
+  startTimestamp_max: OrderDirection
+}

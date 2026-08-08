@@ -1,38 +1,60 @@
-import { db } from "../firebase";
-import {
-  collection,
-  doc,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import { dataConnect } from "../dataconnect";
+import * as generatedSDK from "@dataconnect/admin-generated";
 
-const categoriesRef = collection(db, "ServiceCategory");
+// Safely destructure generated functions
+const {
+  listServiceCategories,
+  createServiceCategory: createCategoryMutation,
+  updateServiceCategory: updateCategoryMutation,
+  deleteServiceCategory: deleteCategoryMutation,
+} = generatedSDK;
 
+/**
+ * Fetch all service categories.
+ */
 export const getCategories = async () => {
   try {
-    const snapshot = await getDocs(categoriesRef);
-    return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    if (!listServiceCategories) {
+      console.warn("listServiceCategories GQL query is not available.");
+      return [];
+    }
+    const { data } = await listServiceCategories(dataConnect);
+    return data?.serviceCategories || [];
   } catch (error) {
     console.error("serviceCategoryService.getCategories error:", error);
     throw error;
   }
 };
 
+/**
+ * Create a new service category.
+ */
 export const createCategory = async (categoryData) => {
   try {
-    const docRef = await addDoc(categoriesRef, categoryData);
-    return { id: docRef.id, ...categoryData };
+    if (!createCategoryMutation) {
+      throw new Error("createServiceCategory mutation is not defined in GraphQL files.");
+    }
+    const { data } = await createCategoryMutation(dataConnect, categoryData);
+    const generatedId =
+      data?.serviceCategory_insert?.id ||
+      data?.serviceCategory?.id ||
+      crypto.randomUUID();
+    return { id: generatedId, ...categoryData };
   } catch (error) {
     console.error("serviceCategoryService.createCategory error:", error);
     throw error;
   }
 };
 
+/**
+ * Update an existing service category name.
+ */
 export const updateCategory = async (categoryId, updates) => {
   try {
-    await updateDoc(doc(db, "ServiceCategory", categoryId), updates);
+    if (!updateCategoryMutation) {
+      throw new Error("updateServiceCategory mutation is not defined in GraphQL files.");
+    }
+    await updateCategoryMutation(dataConnect, { id: categoryId, ...updates });
     return { id: categoryId, ...updates };
   } catch (error) {
     console.error("serviceCategoryService.updateCategory error:", error);
@@ -40,9 +62,15 @@ export const updateCategory = async (categoryId, updates) => {
   }
 };
 
+/**
+ * Delete a service category.
+ */
 export const deleteCategory = async (categoryId) => {
   try {
-    await deleteDoc(doc(db, "ServiceCategory", categoryId));
+    if (!deleteCategoryMutation) {
+      throw new Error("deleteServiceCategory mutation is not defined in GraphQL files.");
+    }
+    await deleteCategoryMutation(dataConnect, { id: categoryId });
     return true;
   } catch (error) {
     console.error("serviceCategoryService.deleteCategory error:", error);

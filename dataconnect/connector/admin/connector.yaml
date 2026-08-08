@@ -1,0 +1,6 @@
+connectorId: "admin"
+generate:
+  javascriptSdk:
+    outputDir: "../../../src/dataconnect-generated"
+    package: "@dataconnect/admin-generated"
+    packageJsonDir: "../../.."

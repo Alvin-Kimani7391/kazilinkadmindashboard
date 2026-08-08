@@ -5,6 +5,7 @@ import {
   ChevronDown, Search
 } from 'lucide-react';
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { logout } from '../services/authService';
 
 
 
@@ -67,10 +68,15 @@ const Layout = ({ children }) => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUser');
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('adminUser');
+      navigate('/login', { replace: true });
+    }
   };
 
   const handleNavigate = (path) => {

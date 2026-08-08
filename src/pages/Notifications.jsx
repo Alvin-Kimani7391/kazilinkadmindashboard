@@ -3,9 +3,6 @@ import { Bell, Check, X, AlertCircle, CreditCard, Users, Briefcase, Trash2, Load
 import { getNotifications, markAsRead, deleteNotification } from '../services/notificationService';
 import { timeAgo } from '../utils/formatters';
 
-// Notification docs don't have a `type` field in the schema, so the icon is
-// picked with a simple keyword heuristic against the title/message. If you
-// add a `type` field later, this can switch to a direct lookup.
 const getIcon = (notification) => {
   const text = `${notification.title || ''} ${notification.message || ''}`.toLowerCase();
   if (text.includes('job') || text.includes('booking')) return <Briefcase size={18} className="text-info" />;
@@ -21,13 +18,12 @@ const Notifications = () => {
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all');
   const [busyId, setBusyId] = useState(null);
+  const [isBulkBusy, setIsBulkBusy] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     setError('');
 
-    // Real-time subscription — no recipientId filter, so this shows every
-    // notification in the system (appropriate for an admin view).
     const unsubscribe = getNotifications((data) => {
       setNotifications(data);
       setLoading(false);
@@ -46,12 +42,19 @@ const Notifications = () => {
 
   const handleMarkAsRead = async (id) => {
     setBusyId(id);
+    // Optimistic Update
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+    );
     try {
       await markAsRead(id);
-      // No local state mutation needed — onSnapshot will push the update.
     } catch (err) {
       console.error('Mark as read error:', err);
       alert('Could not update this notification.');
+      // Revert Optimistic Update
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, isRead: false } : n))
+      );
     } finally {
       setBusyId(null);
     }
@@ -59,21 +62,35 @@ const Notifications = () => {
 
   const handleMarkAllAsRead = async () => {
     const unread = notifications.filter((n) => !n.isRead);
+    if (unread.length === 0) return;
+
+    setIsBulkBusy(true);
+    // Optimistic Update
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+
     try {
       await Promise.all(unread.map((n) => markAsRead(n.id)));
     } catch (err) {
       console.error('Mark all as read error:', err);
       alert('Some notifications could not be updated.');
+    } finally {
+      setIsBulkBusy(false);
     }
   };
 
   const handleDelete = async (id) => {
     setBusyId(id);
+    const originalNotifications = [...notifications];
+    // Optimistic Update
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+
     try {
       await deleteNotification(id);
     } catch (err) {
       console.error('Delete notification error:', err);
       alert('Could not delete this notification.');
+      // Revert Optimistic Update
+      setNotifications(originalNotifications);
     } finally {
       setBusyId(null);
     }
@@ -81,11 +98,21 @@ const Notifications = () => {
 
   const handleDeleteAll = async () => {
     if (!window.confirm('Delete all notifications? This cannot be undone.')) return;
+    
+    setIsBulkBusy(true);
+    const originalNotifications = [...notifications];
+    // Optimistic Update
+    setNotifications([]);
+
     try {
-      await Promise.all(notifications.map((n) => deleteNotification(n.id)));
+      await Promise.all(originalNotifications.map((n) => deleteNotification(n.id)));
     } catch (err) {
       console.error('Delete all error:', err);
       alert('Some notifications could not be deleted.');
+      // Revert Optimistic Update
+      setNotifications(originalNotifications);
+    } finally {
+      setIsBulkBusy(false);
     }
   };
 
@@ -99,19 +126,21 @@ const Notifications = () => {
         <div className="flex flex-wrap gap-2">
           {unreadCount > 0 && (
             <button
+              disabled={isBulkBusy}
               onClick={handleMarkAllAsRead}
-              className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-lg font-medium hover:bg-primary/20 transition-colors"
+              className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-lg font-medium hover:bg-primary/20 transition-colors disabled:opacity-50"
             >
-              <Check size={18} />
+              {isBulkBusy ? <Loader2 size={18} className="animate-spin" /> : <Check size={18} />}
               Mark All Read ({unreadCount})
             </button>
           )}
           {notifications.length > 0 && (
             <button
+              disabled={isBulkBusy}
               onClick={handleDeleteAll}
-              className="flex items-center gap-2 bg-error/10 text-error px-4 py-2 rounded-lg font-medium hover:bg-error/20 transition-colors"
+              className="flex items-center gap-2 bg-error/10 text-error px-4 py-2 rounded-lg font-medium hover:bg-error/20 transition-colors disabled:opacity-50"
             >
-              <Trash2 size={18} />
+              {isBulkBusy ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
               Clear All
             </button>
           )}
@@ -194,7 +223,11 @@ const Notifications = () => {
                             className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
                             title="Mark as read"
                           >
-                            <Check size={16} className="text-gray-400" />
+                            {busyId === notification.id ? (
+                              <Loader2 size={16} className="animate-spin text-gray-400" />
+                            ) : (
+                              <Check size={16} className="text-gray-400" />
+                            )}
                           </button>
                         )}
                         <button
@@ -203,7 +236,11 @@ const Notifications = () => {
                           className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
                           title="Delete"
                         >
-                          <X size={16} className="text-gray-400" />
+                          {busyId === notification.id ? (
+                            <Loader2 size={16} className="animate-spin text-gray-400" />
+                          ) : (
+                            <X size={16} className="text-gray-400" />
+                          )}
                         </button>
                       </div>
                     </div>

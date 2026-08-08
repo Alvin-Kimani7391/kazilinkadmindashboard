@@ -1,0 +1,78 @@
+mutation CreateUser(
+  $name: String!
+  $email: String
+  $role: String
+  $phoneNumber: String
+  $profilePicture: String
+  $bio: String
+  $hourlyRate: Float
+) @auth(level: USER) {
+  user_insert(data: {
+    name: $name
+    email: $email
+    role: $role
+    phoneNumber: $phoneNumber
+    profilePicture: $profilePicture
+    bio: $bio
+    hourlyRate: $hourlyRate
+  })
+}
+
+mutation UpdateUser(
+  $id: UUID!
+  $name: String
+  $email: String
+  $role: String
+  $phoneNumber: String
+  $profilePicture: String
+  $bio: String
+  $hourlyRate: Float
+) @auth(level: USER) {
+  user_update(id: $id, data: {
+    name: $name
+    email: $email
+    role: $role
+    phoneNumber: $phoneNumber
+    profilePicture: $profilePicture
+    bio: $bio
+    hourlyRate: $hourlyRate
+  })
+}
+
+mutation DeleteUser($id: UUID!) @auth(level: USER) {
+  user_delete(id: $id)
+}
+
+mutation UpdateBookingStatus($id: UUID!, $status: String!) @auth(level: USER) {
+  booking_update(id: $id, data: { status: $status })
+}
+
+mutation DeleteBooking($id: UUID!) @auth(level: USER) {
+  booking_delete(id: $id)
+}
+
+mutation DeleteReview($id: UUID!) @auth(level: USER) {
+  review_delete(id: $id)
+}
+
+mutation MarkNotificationRead($id: UUID!) @auth(level: USER) {
+  notification_update(id: $id, data: { isRead: true })
+}
+
+mutation DeleteNotification($id: UUID!) @auth(level: USER) {
+  notification_delete(id: $id)
+}
+# Create Service Category
+mutation CreateServiceCategory($name: String!) @auth(level: USER) {
+  serviceCategory_insert(data: { name: $name })
+}
+
+# Update Service Category
+mutation UpdateServiceCategory($id: UUID!, $name: String!) @auth(level: USER) {
+  serviceCategory_update(id: $id, data: { name: $name })
+}
+
+# Delete Service Category
+mutation DeleteServiceCategory($id: UUID!) @auth(level: USER) {
+  serviceCategory_delete(id: $id)
+}

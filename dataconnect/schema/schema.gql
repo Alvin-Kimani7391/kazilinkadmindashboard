@@ -1,0 +1,63 @@
+# ⚠️ Ensure this matches your project's actual source file before running deployment!
+
+type User @table {
+  name: String!
+  email: String!
+  role: String!
+  phoneNumber: String!
+  profilePicture: String
+  bio: String
+  hourlyRate: Float
+}
+
+type ServiceCategory @table {
+  name: String!
+}
+
+type Booking @table {
+  client: User!
+  provider: User!
+  category: ServiceCategory!
+  status: String!
+  startTime: Timestamp!
+  endTime: Timestamp!
+  totalDurationSeconds: Int
+  serviceLocation: String
+}
+
+type Review @table {
+  booking: Booking!
+  client: User!
+  rating: Int!
+  comment: String
+  createdAt: Timestamp!
+}
+
+type WorkSession @table {
+  booking: Booking!
+  startTimestamp: Timestamp!
+  endTimestamp: Timestamp
+  notes: String
+}
+
+type Conversation @table {
+  client: User!
+  provider: User!
+  updatedAt: Timestamp!
+  lastMessagePreview: String
+}
+
+type Message @table {
+  conversation: Conversation!
+  sender: User!
+  content: String!
+  timestamp: Timestamp!
+}
+
+type Notification @table {
+  recipient: User!
+  title: String!
+  message: String!
+  isRead: Boolean!
+  createdAt: Timestamp!
+}
